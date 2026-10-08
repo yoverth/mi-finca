@@ -6,12 +6,12 @@ import {
   ScrollView,
   FlatList,
   Pressable,
-  TextInput,
   useWindowDimensions,
   StatusBar,
   Platform,
 } from "react-native";
 import { Accelerometer } from "expo-sensors";
+import ExploracionCamara from "./ExploracionCamara";
 
 const VERDE = "#0B4D2A";
 const VERDE_CLARO = "#B8F0C5";
@@ -746,7 +746,7 @@ function TarjetaProducto({ producto }) {
 }
 
 /* =========================================================
-   CATÁLOGO ORIGINAL
+   CATÁLOGO ORIGINAL (ScrollView)
 ========================================================= */
 
 function CatalogoOriginal() {
@@ -766,7 +766,7 @@ function CatalogoOriginal() {
 }
 
 /* =========================================================
-   CATÁLOGO OPTIMIZADO
+   CATÁLOGO OPTIMIZADO (FlatList)
 ========================================================= */
 
 function CatalogoOptimizado() {
@@ -785,7 +785,7 @@ function CatalogoOptimizado() {
 }
 
 /* =========================================================
-   CATÁLOGO ADAPTATIVO
+   CATÁLOGO ADAPTATIVO (Multi-columna responsiva)
 ========================================================= */
 
 function CatalogoAdaptativo({ width }) {
@@ -823,7 +823,7 @@ function CatalogoAdaptativo({ width }) {
 }
 
 /* =========================================================
-   PANTALLA SENSORES (SESIÓN 6 + MEJORAS PROPIAS C y D)
+   PANTALLA SENSORES (SESIÓN 6 + MEJORAS C y D)
 ========================================================= */
 
 function PantallaSensores() {
@@ -921,7 +921,6 @@ function PantallaSensores() {
           </Pressable>
         </View>
 
-        {/* Mejora D: Pausa de escucha de hardware */}
         {!esSimulado && (
           <Pressable
             style={[
@@ -962,7 +961,7 @@ function PantallaSensores() {
         </View>
       </View>
 
-      {/* Mejora C: Indicador con Tres Zonas y Nivel Activo */}
+      {/* Nivel didáctico de tres zonas */}
       <View style={styles.tarjeta}>
         <Text style={styles.etiqueta}>NIVEL DIDÁCTICO DE CALIBRACIÓN</Text>
         <Text style={{ textAlign: "center", fontSize: 16, marginVertical: 8, fontWeight: "bold", color: VERDE }}>
@@ -1004,7 +1003,6 @@ function PantallaSensores() {
           </View>
         </View>
 
-        {/* Pista de desplazamiento con círculo */}
         <View style={[styles.pistaSensor, { alignItems: alineacionCirculo }]}>
           <View style={styles.circuloNivel}>
             <Text style={{ color: BLANCO, fontSize: 11, fontWeight: "bold" }}>
@@ -1047,7 +1045,7 @@ function PantallaSensores() {
 }
 
 /* =========================================================
-   CATÁLOGO PRINCIPAL (CONSERVA TODAS LAS VERSIONES + SENSORES)
+   CATÁLOGO MULTI-PESTAÑA (Original, Optimizada, Adaptativa, Sensores)
 ========================================================= */
 
 function Catalogo() {
@@ -1134,7 +1132,7 @@ function Asistente() {
 }
 
 /* =========================================================
-   APP PRINCIPAL
+   APP PRINCIPAL (CON TODAS LAS VISTAS Y NAVEGACIÓN COMPLETA)
 ========================================================= */
 
 export default function App() {
@@ -1146,6 +1144,7 @@ export default function App() {
     ["Gastos", "$"],
     ["Trabajadores", "♟"],
     ["Sensores", "◎"],
+    ["Cámara", "📷"],
     ["Asistente", "✦"],
   ];
 
@@ -1161,6 +1160,10 @@ export default function App() {
         return <Trabajadores />;
       case "Sensores":
         return <PantallaSensores />;
+      case "Cámara":
+        return <ExploracionCamara />;
+      case "Catalogo":
+        return <Catalogo />;
       case "Asistente":
         return <Asistente />;
       default:
@@ -1176,6 +1179,7 @@ export default function App() {
 
       {contenido}
 
+      {/* Botón flotante para acceder al Catálogo (Original, Optimizada, Adaptativa, Sensores) */}
       <Pressable
         style={styles.botonCatalogoFlotante}
         onPress={() => setPantalla("Catalogo")}
@@ -1183,6 +1187,7 @@ export default function App() {
         <Text style={styles.botonCatalogoTexto}>Catálogo</Text>
       </Pressable>
 
+      {/* Barra de navegación inferior */}
       <View style={styles.navegacion}>
         {opciones.map(([nombre, icono]) => (
           <Pressable
@@ -1223,7 +1228,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: CREMA,
   },
-
   header: {
     minHeight: 75,
     paddingHorizontal: 18,
@@ -1235,7 +1239,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#EEE8DD",
   },
-
   logo: {
     width: 42,
     height: 42,
@@ -1245,25 +1248,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-
   logoText: {
     color: BLANCO,
     fontSize: 25,
     fontWeight: "bold",
   },
-
   nombreFinca: {
     fontSize: 17,
     fontWeight: "bold",
     color: "#183C28",
   },
-
   subtituloHeader: {
     fontSize: 12,
     color: MARRON,
     marginTop: 2,
   },
-
   estado: {
     backgroundColor: VERDE_CLARO,
     borderRadius: 20,
@@ -1273,7 +1272,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 8,
   },
-
   punto: {
     width: 7,
     height: 7,
@@ -1281,11 +1279,9 @@ const styles = StyleSheet.create({
     backgroundColor: VERDE,
     marginRight: 5,
   },
-
   estadoTexto: {
     color: "#173D28",
   },
-
   usuario: {
     width: 38,
     height: 38,
@@ -1294,17 +1290,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   usuarioTexto: {
     color: BLANCO,
     fontSize: 20,
   },
-
   contenedor: {
     padding: 18,
     paddingBottom: 120,
   },
-
   bannerVerde: {
     backgroundColor: "#27653D",
     marginHorizontal: -18,
@@ -1312,7 +1305,6 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     marginBottom: 0,
   },
-
   estadoGrande: {
     backgroundColor: "#EFF0E9",
     padding: 8,
@@ -1320,23 +1312,19 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginBottom: 8,
   },
-
   estadoGrandeTexto: {
     color: "#47614D",
   },
-
   saludo: {
     color: BLANCO,
     fontSize: 27,
     fontWeight: "bold",
     marginBottom: 6,
   },
-
   ubicacion: {
     color: "#CDE5D4",
     fontSize: 15,
   },
-
   alerta: {
     backgroundColor: DURAZNO,
     borderRadius: 15,
@@ -1349,7 +1337,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 8,
   },
-
   alertaIcono: {
     width: 52,
     height: 52,
@@ -1359,63 +1346,52 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 12,
   },
-
   alertaTitulo: {
     fontSize: 13,
     color: MARRON,
     letterSpacing: 1,
   },
-
   alertaValor: {
     fontSize: 23,
     fontWeight: "bold",
     marginTop: 3,
   },
-
   alertaDetalle: {
     fontSize: 14,
     color: "#6F4939",
   },
-
   flecha: {
     fontSize: 32,
   },
-
   seccionTitulo: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
   },
-
   titulo: {
     fontSize: 23,
     fontWeight: "bold",
     color: "#181612",
   },
-
   tituloPequeno: {
     fontSize: 15,
     fontWeight: "bold",
   },
-
   tituloSeccion: {
     fontSize: 22,
     fontWeight: "bold",
     marginTop: 16,
     marginBottom: 12,
   },
-
   fecha: {
     fontSize: 14,
     color: "#4B4B44",
   },
-
   verTodos: {
     color: VERDE,
     fontWeight: "bold",
   },
-
   metrica: {
     backgroundColor: BLANCO,
     borderRadius: 15,
@@ -1425,27 +1401,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 1,
   },
-
   metricaTitulo: {
     fontSize: 15,
     color: "#34322E",
   },
-
   metricaValor: {
     fontSize: 30,
     fontWeight: "bold",
     color: VERDE,
     marginVertical: 6,
   },
-
   metricaCambio: {
     color: VERDE,
   },
-
   metricaDescripcion: {
     color: "#655D55",
   },
-
   metricaIcono: {
     width: 60,
     height: 60,
@@ -1454,7 +1425,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   botonVerde: {
     backgroundColor: VERDE,
     borderRadius: 13,
@@ -1464,7 +1434,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-
   botonMarron: {
     backgroundColor: MARRON,
     borderRadius: 13,
@@ -1474,7 +1443,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-
   botonDorado: {
     backgroundColor: "#965800",
     borderRadius: 13,
@@ -1484,18 +1452,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 18,
   },
-
   botonTexto: {
     color: BLANCO,
     fontSize: 17,
     fontWeight: "bold",
   },
-
   botonPlus: {
     color: BLANCO,
     fontSize: 24,
   },
-
   movimiento: {
     backgroundColor: BLANCO,
     borderRadius: 14,
@@ -1504,7 +1469,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
   iconoMovimiento: {
     width: 48,
     height: 48,
@@ -1514,48 +1478,40 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-
   movimientoNombre: {
     fontWeight: "bold",
     fontSize: 15,
   },
-
   movimientoDetalle: {
     color: "#69645E",
     marginTop: 3,
   },
-
   movimientoValor: {
     color: VERDE,
     fontWeight: "bold",
     fontSize: 17,
     textAlign: "right",
   },
-
   movimientoTipo: {
     color: "#77716A",
     textAlign: "right",
     marginTop: 4,
   },
-
   tarjeta: {
     backgroundColor: BLANCO,
     borderRadius: 16,
     padding: 18,
     marginBottom: 16,
   },
-
   etiqueta: {
     fontSize: 14,
     letterSpacing: 1,
     color: "#625D55",
   },
-
   marronTexto: {
     color: MARRON,
     fontSize: 14,
   },
-
   recolector: {
     backgroundColor: "#F3F0E9",
     borderRadius: 15,
@@ -1564,7 +1520,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-
   avatar: {
     width: 52,
     height: 52,
@@ -1574,59 +1529,49 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-
   avatarTexto: {
     color: MARRON,
     fontSize: 19,
     fontWeight: "bold",
   },
-
   nombreRecolector: {
     fontSize: 18,
     fontWeight: "bold",
   },
-
   cedula: {
     color: "#5E5B56",
     marginTop: 2,
   },
-
   botonCambiar: {
     backgroundColor: "#E6E2DA",
     paddingHorizontal: 13,
     paddingVertical: 10,
     borderRadius: 22,
   },
-
   personas: {
     flexDirection: "row",
     gap: 8,
   },
-
   persona: {
     backgroundColor: "#F0ECE5",
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 20,
   },
-
   personaActiva: {
     backgroundColor: VERDE,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 20,
   },
-
   personaTextoActivo: {
     color: BLANCO,
   },
-
   lotes: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 18,
   },
-
   lote: {
     flex: 1,
     backgroundColor: BLANCO,
@@ -1634,7 +1579,6 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: "center",
   },
-
   loteActivo: {
     flex: 1,
     backgroundColor: VERDE,
@@ -1642,25 +1586,21 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: "center",
   },
-
   loteTextoActivo: {
     color: BLANCO,
     fontWeight: "bold",
   },
-
   tarjetaPesaje: {
     backgroundColor: BLANCO,
     padding: 20,
     borderRadius: 17,
     marginBottom: 16,
   },
-
   pesoTitulo: {
     textAlign: "center",
     color: "#45423D",
     fontSize: 17,
   },
-
   pesoValor: {
     textAlign: "center",
     color: VERDE,
@@ -1668,12 +1608,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginVertical: 3,
   },
-
   pesoKg: {
     color: MARRON,
     fontSize: 25,
   },
-
   tara: {
     backgroundColor: "#ECEAE4",
     borderRadius: 20,
@@ -1681,13 +1619,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 20,
   },
-
   controlesPeso: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 10,
   },
-
   control: {
     flex: 1,
     backgroundColor: "#F0EDE7",
@@ -1696,21 +1632,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
   },
-
   controlNumero: {
     fontSize: 22,
   },
-
   controlRojo: {
     backgroundColor: "#FFD5D5",
   },
-
   controlesPequenos: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 20,
   },
-
   controlPequeno: {
     flex: 1,
     backgroundColor: "#ECE9E3",
@@ -1718,7 +1650,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-
   tarifa: {
     backgroundColor: "#F3F0E9",
     padding: 15,
@@ -1728,17 +1659,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
   },
-
   tarifaTitulo: {
     color: "#5D574F",
   },
-
   tarifaValor: {
     fontSize: 22,
     fontWeight: "bold",
     marginTop: 4,
   },
-
   total: {
     backgroundColor: DURAZNO,
     padding: 18,
@@ -1747,18 +1675,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   totalTitulo: {
     color: "#754632",
     fontWeight: "bold",
     fontSize: 16,
   },
-
   totalValor: {
     fontSize: 30,
     fontWeight: "bold",
   },
-
   nota: {
     backgroundColor: BLANCO,
     padding: 15,
@@ -1768,14 +1693,12 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 15,
   },
-
   botonNota: {
     backgroundColor: "#ECE9E3",
     paddingHorizontal: 13,
     paddingVertical: 10,
     borderRadius: 20,
   },
-
   guardar: {
     backgroundColor: VERDE,
     borderRadius: 13,
@@ -1783,43 +1706,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-
   guardarTexto: {
     color: BLANCO,
     fontSize: 17,
     fontWeight: "bold",
   },
-
   descartar: {
     backgroundColor: "#EFECE5",
     borderRadius: 13,
     padding: 17,
     alignItems: "center",
   },
-
   descartarTexto: {
     color: MARRON,
     fontWeight: "bold",
   },
-
   gastoTotal: {
     fontSize: 27,
     color: MARRON,
     fontWeight: "bold",
     marginVertical: 8,
   },
-
   detalleGasto: {
     color: "#55514B",
     marginTop: 5,
   },
-
   mayorGasto: {
     color: MARRON,
     fontWeight: "bold",
     marginTop: 6,
   },
-
   barra: {
     height: 8,
     borderRadius: 8,
@@ -1828,11 +1744,9 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#DDD",
   },
-
   segmento: {
     backgroundColor: MARRON,
   },
-
   filtro: {
     backgroundColor: "#ECE9E3",
     borderRadius: 20,
@@ -1840,20 +1754,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginRight: 8,
   },
-
   filtroActivo: {
     backgroundColor: VERDE,
   },
-
   filtroTexto: {
     color: "#333",
   },
-
   filtroTextoActivo: {
     color: BLANCO,
     fontWeight: "bold",
   },
-
   gastoItem: {
     backgroundColor: BLANCO,
     borderRadius: 13,
@@ -1862,7 +1772,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
   gastoIcono: {
     width: 44,
     height: 44,
@@ -1872,65 +1781,53 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-
   gastoNombre: {
     fontWeight: "bold",
   },
-
   gastoDetalle: {
     color: "#777",
     marginTop: 3,
   },
-
   gastoValor: {
     color: MARRON,
     fontSize: 16,
     fontWeight: "bold",
   },
-
   formulario: {
     backgroundColor: BLANCO,
     borderRadius: 15,
     padding: 18,
     marginTop: 10,
   },
-
   label: {
     fontWeight: "bold",
     marginTop: 15,
     marginBottom: 8,
   },
-
   gridFormulario: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
   },
-
   opcionFormulario: {
     width: "48%",
     backgroundColor: "#EEEAE3",
     padding: 13,
     borderRadius: 10,
   },
-
   opcionActiva: {
     backgroundColor: VERDE,
   },
-
   opcionTexto: {
     color: "#333",
   },
-
   opcionTextoActivo: {
     color: BLANCO,
   },
-
   gridLotes: {
     flexDirection: "row",
     gap: 7,
   },
-
   loteFormulario: {
     flex: 1,
     padding: 12,
@@ -1938,13 +1835,11 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     alignItems: "center",
   },
-
   valorInput: {
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
   },
-
   masMenos: {
     backgroundColor: "#EEEAE3",
     width: 45,
@@ -1953,7 +1848,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   valorGrande: {
     flex: 1,
     backgroundColor: "#F4F1EA",
@@ -1963,14 +1857,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: MARRON,
   },
-
   concepto: {
     backgroundColor: "#F4F1EA",
     padding: 15,
     borderRadius: 10,
     marginBottom: 18,
   },
-
   trabajador: {
     backgroundColor: BLANCO,
     borderRadius: 15,
@@ -1979,13 +1871,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-
   pesoTrabajador: {
     color: VERDE,
     fontWeight: "bold",
     fontSize: 18,
   },
-
   descripcion: {
     color: "#67635D",
     fontSize: 15,
@@ -1993,31 +1883,26 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 20,
   },
-
   asistente: {
     backgroundColor: BLANCO,
     padding: 18,
     borderRadius: 16,
   },
-
   asistenteTitulo: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
   },
-
   pregunta: {
     backgroundColor: "#F0ECE5",
     padding: 15,
     borderRadius: 12,
     marginBottom: 9,
   },
-
   catalogoHeader: {
     padding: 18,
     paddingBottom: 8,
   },
-
   versiones: {
     flexDirection: "row",
     backgroundColor: "#EEEAE3",
@@ -2026,28 +1911,23 @@ const styles = StyleSheet.create({
     padding: 4,
     marginBottom: 8,
   },
-
   version: {
     flex: 1,
     paddingVertical: 10,
     alignItems: "center",
     borderRadius: 21,
   },
-
   versionActiva: {
     backgroundColor: VERDE,
   },
-
   versionTexto: {
     color: "#555",
     fontSize: 12,
   },
-
   versionTextoActivo: {
     color: BLANCO,
     fontWeight: "bold",
   },
-
   resumen: {
     backgroundColor: BLANCO,
     marginHorizontal: 18,
@@ -2055,40 +1935,33 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 14,
   },
-
   resumenGrande: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   resumenTitulo: {
     fontSize: 18,
     fontWeight: "bold",
     color: VERDE,
     marginBottom: 8,
   },
-
   resumenDato: {
     marginTop: 4,
   },
-
   resumenEtiqueta: {
     fontSize: 12,
     color: "#6A665E",
   },
-
   resumenValor: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#222",
   },
-
   catalogoContenido: {
     padding: 18,
     paddingBottom: 120,
   },
-
   producto: {
     backgroundColor: BLANCO,
     borderRadius: 14,
@@ -2099,7 +1972,6 @@ const styles = StyleSheet.create({
     minHeight: 150,
     elevation: 1,
   },
-
   productoIcono: {
     width: 38,
     height: 38,
@@ -2109,33 +1981,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 8,
   },
-
   productoNombre: {
     fontWeight: "bold",
     fontSize: 15,
     color: "#222",
   },
-
   productoDescripcion: {
     fontSize: 12,
     color: "#716D66",
     marginTop: 5,
     lineHeight: 17,
   },
-
   productoCategoria: {
     fontSize: 11,
     color: VERDE,
     marginTop: 8,
   },
-
   productoPrecio: {
     color: MARRON,
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 4,
   },
-
   botonCatalogoFlotante: {
     position: "absolute",
     right: 18,
@@ -2146,12 +2013,10 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     elevation: 5,
   },
-
   botonCatalogoTexto: {
     color: BLANCO,
     fontWeight: "bold",
   },
-
   navegacion: {
     position: "absolute",
     bottom: 0,
@@ -2164,33 +2029,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
-
   navItem: {
     alignItems: "center",
     flex: 1,
   },
-
   navIcono: {
     fontSize: 21,
     color: "#242E27",
   },
-
   navIconoActivo: {
     color: VERDE,
   },
-
   navTexto: {
     fontSize: 10,
     marginTop: 2,
     color: "#333",
   },
-
   navTextoActivo: {
     color: VERDE,
     fontWeight: "bold",
   },
-
-  /* Estilos específicos de Sensores */
   botonModo: {
     flex: 1,
     paddingVertical: 10,
